@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@remotion/cli": "4.0.521",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.521"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.7",
+    "typescript": "5.9.3"
+  },
+  "name": "one-minute-video-project",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/Root.tsx --no-open",
+    "typecheck": "tsc --noEmit"
+  }
+}

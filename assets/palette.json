@@ -1,0 +1,18 @@
+{
+  "source": "https://github.com/itwanger/ai-better/blob/786e4616e3e287f9f8de35dc79f66b72a24d3d0e/script/shared/remotion/components/index.tsx",
+  "C": {
+    "bg": "#f7f2e8",
+    "card": "#fefdf9",
+    "ink": "#232838",
+    "blue": "#2150b4",
+    "rust": "#b8532a",
+    "green": "#2f7d4f",
+    "gray": "#6b6f7d",
+    "faint": "#a9aeba",
+    "line": "#d8d1c3",
+    "shadow": "#dcdee0",
+    "track": "#e6e9f0",
+    "soft": "#a7b6db",
+    "select": "#dce4f6"
+  }
+}

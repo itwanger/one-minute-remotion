@@ -1,0 +1,21 @@
+{
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30
+  },
+  "tts": {
+    "speakerId": "",
+    "resourceId": "",
+    "apiBase": "",
+    "speedRatio": 1.0,
+    "atempo": 1.0,
+    "audio": {
+      "format": "mp3",
+      "sampleRate": 48000
+    }
+  },
+  "volc": {
+    "apiKeyEnv": "VOLC_TTS_API_KEY"
+  }
+}
