@@ -12,7 +12,7 @@ def main():
     root=Path(__file__).resolve().parents[1]
     out=a.output.expanduser().resolve()
     out.parent.mkdir(parents=True,exist_ok=True)
-    allowed={'SKILL.md','README.md','LICENSE','THIRD_PARTY_NOTICES.md','agents','assets','references','scripts','examples'}
+    allowed={'SKILL.md','README.md','LICENSE','THIRD_PARTY_NOTICES.md','agents','assets','references','scripts','examples','docs'}
     files=sorted(f for f in root.rglob('*') if f.is_file() and f.relative_to(root).parts[0] in allowed
         and not {'__pycache__','node_modules','.git'}.intersection(f.relative_to(root).parts)
         and f.suffix!='.pyc' and f.name!='.DS_Store' and not f.name.startswith('.env') and f!=out)

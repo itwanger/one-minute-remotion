@@ -27,7 +27,7 @@ class PackageTests(unittest.TestCase):
             self.assertEqual(run(ROOT/'scripts/package_skill.py','--output',out).returncode,0)
             with ZipFile(out) as z:
                 self.assertIsNone(z.testzip())
-                for name in ['SKILL.md','LICENSE','assets/runtime/shared/tools/import_audio.py','assets/huashu/diagram.js','references/motion.md']:
+                for name in ['SKILL.md','LICENSE','assets/runtime/shared/tools/import_audio.py','assets/huashu/diagram.js','references/motion.md','docs/rrf-case.md','docs/media/rrf-motion.gif']:
                     self.assertIn('one-minute-remotion/'+name,z.namelist())
                 self.assertFalse(any('node_modules/' in n or '__pycache__/' in n or '/.env' in n for n in z.namelist()))
 

@@ -1,0 +1,48 @@
+{
+  "video": {
+    "url": "https://github.com/itwanger/one-minute-remotion/releases/download/v0.1.1/rrf-demo.mp4",
+    "sha256": "014bdf1b9397d51f7059c7dbc62f4f428e2b823d89b3d084ed8426f91fe7483f",
+    "bytes": 4341421,
+    "durationSec": 66.133333,
+    "fps": 30,
+    "frames": 1984,
+    "width": 1920,
+    "height": 1080,
+    "origin": "ai-better/script/one-minute-rrf/preview/layout-v5/rrf-layout-v5-review.mp4",
+    "transcoded": false
+  },
+  "images": {
+    "rrf-motion.gif": {
+      "kind": "continuous excerpt from complete MP4",
+      "startSec": 46.8,
+      "endSec": 62.3,
+      "fps": 12,
+      "speed": 1,
+      "audio": false
+    },
+    "rrf-studio-playback.gif": {
+      "kind": "new real Remotion Studio browser screen recording; leading wait trimmed",
+      "audio": false
+    },
+    "rrf-manuscript.png": {
+      "kind": "real screenshot of rendered manuscript on GitHub",
+      "url": "https://github.com/itwanger/one-minute-remotion/blob/main/examples/rrf.md"
+    },
+    "rrf-rule.png": {
+      "kind": "existing reviewed frame",
+      "frame": 880
+    },
+    "rrf-result.png": {
+      "kind": "existing reviewed frame",
+      "frame": 1835
+    },
+    "rrf-missing-a.png": {
+      "kind": "frame extracted from complete MP4",
+      "timeSec": 41.4
+    },
+    "rrf-studio.png": {
+      "kind": "existing actual Studio screenshot",
+      "frame": 880
+    }
+  }
+}
