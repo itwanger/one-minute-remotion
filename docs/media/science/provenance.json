@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-06",
+  "note": "GIFs are continuous real excerpts from existing exported videos at original speed, without audio. Demo MP4s are copied byte-for-byte; no new video content was generated.",
+  "cases": [
+    {
+      "topic": "newton-first-law",
+      "video": {
+        "url": "https://github.com/itwanger/one-minute-remotion/releases/download/v0.2.1/newton-first-law-demo.mp4",
+        "sourceProject": "newton-first-law/unattributed/memphis",
+        "sourceFile": "output/newton-first-law-memphis.mp4",
+        "sha256": "16a18116a3e55eebee91bb6f3f42d61cbc9b56ff53cc1253525aa3b99b87aa6a",
+        "bytes": 4435943,
+        "durationSec": 84.066667,
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "audio": true,
+        "transcoded": false
+      },
+      "gif": {
+        "file": "newton-first-law.gif",
+        "startSec": 39,
+        "endSec": 51,
+        "fps": 12,
+        "width": 800,
+        "speed": 1,
+        "audio": false,
+        "sha256": "b18cbae6cbf259b56ee43c6e3d4fa7c541469e34e54fc65d67aea15b542c5c78"
+      },
+      "poster": {
+        "file": "newton-first-law.png",
+        "timeSec": 44,
+        "sha256": "099270d9277258692c2ad87f20e6b2efb2d77584228821cb7cb7ece3d9d9997e"
+      }
+    },
+    {
+      "topic": "archimedes-principle",
+      "video": {
+        "url": "https://github.com/itwanger/one-minute-remotion/releases/download/v0.2.1/archimedes-principle-demo.mp4",
+        "sourceProject": "archimedes-principle/namiwork/memphis",
+        "sourceFile": "output/archimedes-memphis.mp4",
+        "sha256": "0af8fd44a7685a30b953cbf30803c5c893f276ea0adfe52c7b2887b84f59e921",
+        "bytes": 6247362,
+        "durationSec": 92.233333,
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "audio": true,
+        "transcoded": false
+      },
+      "gif": {
+        "file": "archimedes-principle.gif",
+        "startSec": 36,
+        "endSec": 46.8,
+        "fps": 12,
+        "width": 800,
+        "speed": 1,
+        "audio": false,
+        "sha256": "6b88e680cc386c8aa795e2a553016ca4869f669c852c360b74be1671768b581f"
+      },
+      "poster": {
+        "file": "archimedes-principle.png",
+        "timeSec": 45.8,
+        "sha256": "aab0438d863ac76c04cdba11471dc463cb6b503de548044e350ea13d425debcb"
+      }
+    },
+    {
+      "topic": "ohms-law",
+      "video": {
+        "url": "https://github.com/itwanger/one-minute-remotion/releases/download/v0.2.1/ohms-law-demo.mp4",
+        "sourceProject": "ohms-law/workbuddy/codex-reviewed",
+        "sourceFile": "output/one-minute-ohms-law.mp4",
+        "sha256": "fca888c9952f866fc757d4d82ba95bf52342ec4e08b4c2035bbd5df6a8a1bb29",
+        "bytes": 6913166,
+        "durationSec": 97.566667,
+        "width": 1920,
+        "height": 1080,
+        "fps": 30,
+        "audio": true,
+        "transcoded": false
+      },
+      "gif": {
+        "file": "ohms-law.gif",
+        "startSec": 54,
+        "endSec": 64.5,
+        "fps": 12,
+        "width": 800,
+        "speed": 1,
+        "audio": false,
+        "sha256": "f3ee0f2ab099463050b670dc113f14f93fd00229bd29dd1e8b238973d438bd35"
+      },
+      "poster": {
+        "file": "ohms-law.png",
+        "timeSec": 63,
+        "sha256": "f2a83e2b14e13b56b31a1856737bff519549e284724e07abd03770d964fc2d92"
+      }
+    }
+  ]
+}

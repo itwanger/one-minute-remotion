@@ -1,0 +1,5 @@
+{
+  "description": "Vibe 知识大赏｜把数理化生与 AI 知识做成 1–2 分钟中文科普视频的 Agent Skill。写稿、配音、Remotion 动画、逐章审片与 MP4 出片，支持暖米几何和孟菲斯画风。",
+  "homepage": "https://github.com/itwanger/one-minute-remotion/releases/latest",
+  "topics": ["agent-skill", "remotion", "educational-video", "science-education", "ai-video", "claude-code", "codex"]
+}
