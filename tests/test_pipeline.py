@@ -27,7 +27,7 @@ class PackageTests(unittest.TestCase):
             self.assertEqual(run(ROOT/'scripts/package_skill.py','--output',out).returncode,0)
             with ZipFile(out) as z:
                 self.assertIsNone(z.testzip())
-                for name in ['SKILL.md','LICENSE','assets/runtime/shared/tools/import_audio.py','assets/huashu/diagram.js','references/motion.md','docs/rrf-case.md','docs/media/rrf-motion.gif']:
+                for name in ['SKILL.md','LICENSE','assets/runtime/shared/tools/import_audio.py','assets/huashu/diagram.js','references/motion.md','references/chapter-preview.md','references/visual-style.md','assets/styles/memphis-palette.ts','examples/pythagorean-theorem.md','docs/rrf-case.md','docs/media/rrf-motion.gif']:
                     self.assertIn('one-minute-remotion/'+name,z.namelist())
                 self.assertFalse(any('node_modules/' in n or '__pycache__/' in n or '/.env' in n for n in z.namelist()))
 
@@ -57,6 +57,51 @@ class PipelineTests(unittest.TestCase):
         self.assertNotEqual(result.returncode,0)
         self.assertIn('speakerId',result.stdout)
 
+    def test_duration_target_defaults_and_validation(self):
+        meta_path=self.project/'project.json'
+        meta=json.loads(meta_path.read_text());meta['config']['tts']['speakerId']='user-audio'
+        meta_path.write_text(json.dumps(meta))
+        args=['lock','--project',self.project,'--source',self.source,'--spoken',self.project/'spoken.txt']
+        result=run(ROOT/'scripts/one_minute.py',*args)
+        self.assertEqual(result.returncode,0,result.stdout)
+        self.assertEqual(json.loads((self.project/'narration-lock.json').read_text())['targetDurationSec'],120)
+        before=(self.project/'narration-lock.json').read_bytes()
+        for value in ['0','-1','nan','inf']:
+            result=run(ROOT/'scripts/one_minute.py',*args,'--replace','--target-sec',value)
+            self.assertNotEqual(result.returncode,0)
+            self.assertEqual((self.project/'narration-lock.json').read_bytes(),before)
+
+    def test_topic_layout_shares_pinned_assets_without_overwriting(self):
+        collection=self.folder/'videos/one-minute'
+        projects=[collection/'pythagorean-theorem/codex/memphis',collection/'ohms-law/workbuddy/memphis']
+        for project in projects:
+            result=run(TOOLS/'init_project.py','--project',project,'--source',self.source,'--spoken',self.spoken)
+            self.assertEqual(result.returncode,0,result.stderr)
+            result=run(ROOT/'scripts/install_huashu.py','--project',project)
+            self.assertEqual(result.returncode,0,result.stderr)
+        for relative in ['remotion/src/huashu','remotion/public/huashu-fonts']:
+            self.assertTrue((projects[0]/relative).is_symlink())
+            self.assertEqual((projects[0]/relative).resolve(),(projects[1]/relative).resolve())
+        palette=collection/'shared/styles/memphis-v1.ts'
+        before=palette.read_bytes()
+        self.assertIn('shared/styles/memphis-v1', (projects[0]/'remotion/src/memphis-palette.ts').read_text())
+        result=run(ROOT/'scripts/install_huashu.py','--project',projects[0])
+        self.assertEqual(result.returncode,0,result.stderr)
+        self.assertEqual(palette.read_bytes(),before)
+        # Detach one local library, customize it, and ensure reinstall refuses to discard it.
+        local=projects[0]/'remotion/src/huashu';shared=local.resolve();local.unlink();shutil.copytree(shared,local)
+        runtime=local/'runtime.ts';runtime.write_text(runtime.read_text()+'\n// user customization\n')
+        custom=runtime.read_bytes()
+        result=run(ROOT/'scripts/install_huashu.py','--project',projects[0])
+        self.assertNotEqual(result.returncode,0)
+        self.assertEqual(runtime.read_bytes(),custom)
+        self.assertNotEqual((shared/'runtime.ts').read_bytes(),custom)
+        for relative in ['flat','topic/codex','shared/codex/memphis']:
+            path=collection/relative
+            result=run(TOOLS/'init_project.py','--project',path,'--source',self.source)
+            self.assertNotEqual(result.returncode,0)
+            self.assertFalse(path.exists())
+
     @unittest.skipUnless(shutil.which('ffmpeg') and shutil.which('ffprobe'),'Requires FFmpeg')
     def test_full_narration_import_duration_and_mutation_guards(self):
         meta_path=self.project/'project.json'
@@ -65,7 +110,7 @@ class PipelineTests(unittest.TestCase):
         meta_path.write_text(json.dumps(meta))
         (self.project/'beats.json').write_text(json.dumps({'chapters':[{'id':'ch1','title':'test'}],
             'beats':[{'id':1,'chapter':'ch1','text':'第一段。'},{'id':2,'chapter':'ch1','text':'第二段。'}]}))
-        locked=run(ROOT/'scripts/one_minute.py','lock','--project',self.project,'--source',self.source,'--spoken',self.project/'spoken.txt')
+        locked=run(ROOT/'scripts/one_minute.py','lock','--project',self.project,'--source',self.source,'--spoken',self.project/'spoken.txt','--target-sec','60')
         self.assertEqual(locked.returncode,0,locked.stdout)
         audio=self.folder/'input.wav'
         with wave.open(str(audio),'wb') as w:

@@ -4,7 +4,7 @@
 
 ## 路径与环境
 
-将 `MINUTE_SKILL` 设为当前实际加载的技能包目录；`SHARED_VIDEO="$MINUTE_SKILL/assets/runtime/shared"`。项目在使用者自己的工作目录，默认 `videos/one-minute-<topic>/`；稿件默认 `docs/src/ai/one-minute/<topic>.md`。安装目录只读，所有 npm 依赖、音频、预览、日志和成片均在项目中。
+将 `MINUTE_SKILL` 设为当前实际加载的技能包目录；`SHARED_VIDEO="$MINUTE_SKILL/assets/runtime/shared"`。项目在使用者自己的工作目录，默认 `videos/one-minute/<topic>/<tool>/<variant>/`（现有作者工作区也可用 `script/one-minute/<topic>/<tool>/<variant>/`）；稿件默认 `docs/src/ai/one-minute/<topic>.md`。安装目录只读，音频、预览、日志和成片在项目中；npm 依赖默认在该项目 `remotion/` 中，动画库、字体和基础色板由集合目录的 `shared/` 共用。
 
 需要 Node.js 22.20+、npm、Python 3.10+、FFmpeg（含 ffprobe）。Remotion 版本在模板 package.json 中固定；在项目 `remotion/` 运行 `npm install`，首次使用可能下载 Chromium。不要把 npm 或模型安装说成 Skill 安装已经执行。Windows 环境的符号链接可能需要开发者模式，无法创建时让使用者启用或改用经过核对的普通 public 目录同步方案，不虚称已支持。
 
@@ -17,12 +17,12 @@
 ```bash
 SHARED_VIDEO="$MINUTE_SKILL/assets/runtime/shared"
 SOURCE="$PWD/docs/src/ai/one-minute/rrf.md"
-PROJECT="$PWD/videos/one-minute-rrf"
+PROJECT="$PWD/videos/one-minute/rrf/codex/warm-geometry"
 python3 "$SHARED_VIDEO/tools/init_project.py" \
   --project "$PROJECT" --source "$SOURCE" --spoken /你的临时目录/spoken.txt --title "RRF"
 ```
 
-`--config /你的配置/video.config.json` 可传入自己已有的配置；否则生成不含音色和服务地址的空配置，保留在 `project.json.config`。初始化不调用 TTS、不安装 npm、不覆盖旧项目。首次仅有一个完整 beat 是工程起点，应按完整意群拆分 `beats.json`，`chapters` 保持单个 `ch1`；拼接 `text` 必须等于 `spoken.txt` 去掉 CR/LF 的文本。
+`--config /你的配置/video.config.json` 可传入自己已有的配置；否则生成不含音色和服务地址的空配置，保留在 `project.json.config`。初始化不调用 TTS、不安装 npm、不覆盖旧项目。主题、工具与版本使用小写英文加连字符，工具未知用 `unattributed`；不把接力项目按每个工具重复复制。初始化会为集合内项目生成暖米/孟菲斯色板的共享导出入口，项目可追加自己的覆盖值。首次仅有一个完整 beat 是工程起点，应按完整意群拆分 `beats.json`，`chapters` 保持单个 `ch1`；拼接 `text` 必须等于 `spoken.txt` 去掉 CR/LF 的文本。
 
 先由使用者选择声音，再锁定。配置至少包含：
 
@@ -48,7 +48,7 @@ python3 "$MINUTE_SKILL/scripts/one_minute.py" lock \
   --project "$PROJECT" --source "$SOURCE" --spoken "$PROJECT/spoken.txt"
 ```
 
-锁定源稿、口播及当前声音配置，不包含密钥。经用户同意修改时先保存旧锁及原因，再用 `--replace`；不能为了检查通过而重锁未经同意的改稿。
+锁定源稿、口播及当前声音配置，不包含密钥。默认目标为120秒，可用 `--target-sec 60` 明确设为60秒；已有锁保持其原目标。经用户同意修改时先保存旧锁及原因，再用 `--replace`；不能为了检查通过而重锁未经同意的改稿。
 
 ### 方式 A：导入自己的配音（不调用云服务）
 
@@ -74,7 +74,7 @@ python3 "$SHARED_VIDEO/tools/gen_cues.py" --project "$PROJECT"
 python3 "$MINUTE_SKILL/scripts/one_minute.py" check --project "$PROJECT"
 ```
 
-`text` 是原文字幕；`ttsText` 仅作读音处理，不能借此改写含义。本包不附带私人音色，不自动训练或克隆声音。`atempo` 表示已选声音管线的固定处理参数，不能为了60秒目标提高；导入音频固定为1。
+`text` 是原文字幕；`ttsText` 仅作读音处理，不能借此改写含义。本包不附带私人音色，不自动训练或克隆声音。`atempo` 表示已选声音管线的固定处理参数，不能为了时长目标提高；导入音频固定为1。
 
 ### 对齐和试听
 
@@ -86,15 +86,15 @@ python3 "$MINUTE_SKILL/scripts/one_minute.py" check --project "$PROJECT"
 python3 "$SHARED_VIDEO/tools/build_timing.py" --project "$PROJECT" --chapter ch1
 ```
 
-该轮交付完整 `build/voiceover.wav`、实测时长与待试听项，然后停下。超过60秒只报告，仍保留全文。
+该轮交付完整 `build/voiceover.wav`、实测时长与待试听项，然后停下。超过锁定目标（默认120秒）只报告，仍保留全文。
 
 ## ③ 分镜
 
-用户推进后才写 `OUTLINE.md`。参考 [动画方法](motion.md) 的镜头表与布局规则，按真实音频设计，不实现下一阶段画面。配音未获确认时，不把“已生成”写成“已认可”。
+配音已确认、用户推进后才写 `OUTLINE.md`；按完整语义约30秒一章（通常25～35秒），记录起止帧、对应原文和 `Chapter<N>Preview`。参考 [动画方法](motion.md) 的镜头表与布局规则，按真实音频设计，不实现下一阶段画面。配音未获确认时，不把“已生成”写成“已认可”。
 
 ## ④ 动画与动态预览
 
-先按 [画面接入](huashu-runtime.md) 安装上游库。模板中的 `Scene.tsx` 是明确标注的工程占位；不能把它交付为完成视频。`Root.tsx` 已接真实音频与时长，但默认 beat 级字幕仍应按实际音频拆成完整、可读的短句。画面由 Agent 根据分镜写入 `Scene.tsx` 及其子模块。
+先读[逐章有声预览](chapter-preview.md)，每轮只制作当前未通过的章节，不扩展到后续章节。按 [画面接入](huashu-runtime.md) 安装上游库。模板中的 `Scene.tsx` 是明确标注的工程占位；不能把它交付为完成视频。`Root.tsx` 已接真实音频与时长，但默认 beat 级字幕仍应按实际音频拆成完整、可读的短句。画面由 Agent 根据分镜写入 `Scene.tsx` 及其子模块。
 
 ```bash
 python3 "$MINUTE_SKILL/scripts/install_huashu.py" --project "$PROJECT"
@@ -103,7 +103,7 @@ npm install
 node "$SHARED_VIDEO/tools/remotion.mjs" typecheck --project "$PROJECT"
 ```
 
-`C` 从项目 `src/palette.ts` 导入。字体必须等待加载后绘制；默认画面保持在 y=890 以上，字幕独立于 Canvas 世界相机。记录 `assets/references/visual-provenance.json` 的上游 commit、真实调用的函数与场景用途。不能只贴方法名而没调用。
+`C` 从项目 `src/palette.ts` 导入；孟菲斯的 `MEMPHIS` 从 `src/memphis-palette.ts` 导入。集合内这些文件是共享色板的导出入口，个别覆盖值留在项目内；不要直接改动旧项目引用的共享版本。动画库/字体安装器会创建相对链接，独立工程则保留本地副本。字体必须等待加载后绘制；默认画面保持在 y=890 以上，字幕独立于 Canvas 世界相机。记录 `assets/references/visual-provenance.json` 的上游 commit、真实调用的函数与场景用途。不能只贴方法名而没调用。
 
 ### Studio 必须后台启动
 
@@ -114,22 +114,30 @@ python3 "$MINUTE_SKILL/scripts/start_studio.py" \
   --shared-video "$SHARED_VIDEO" --project "$PROJECT" --port 3210
 ```
 
-启动器立即返回 PID、日志和候选 URL；`starting` 不是已就绪。最多30秒内有限检查日志尾部、对应 PID/端口与有超时的 HTTP 请求，拿到实际 URL 后在使用者可访问的浏览器打开完整 Composition。检查播放时间、画面、字幕与音轨，暂停后保留服务供查看，再结束本阶段。不要等待常驻命令退出，不接 `head` 管道，不无限轮询。不终止其他项目占用的服务。
+启动器立即返回 PID、日志和候选 URL；`starting` 不是已就绪。最多30秒内有限检查日志尾部、对应 PID/端口与有超时的 HTTP 请求，拿到实际 URL 后在使用者可访问的浏览器打开当前章节 Composition；全部章节通过后才交付整片 Composition。检查播放时间、画面、字幕与音轨，暂停后保留服务供查看，再结束本阶段。不要等待常驻命令退出，不接 `head` 管道，不无限轮询。不终止其他项目占用的服务。
 
 日志与状态在 `preview/studio/`。已有记录但服务失效时先核对 PID、项目与日志，保存旧记录再重试，不能循环拉起或覆盖诊断信息。只有静帧时记“关键帧已检查，动态预览待完成”，不能标④完成。浏览器在远端无法访问 localhost 时说明地址范围并使用可访问的预览方式，不能虚称本地链接对所有人可用。
 
 ## ⑤ 导出与验收
 
-仅在用户推进到本阶段或明确授权连续出片时运行。若要用 `--detach`，检查返回的日志与产物，不重复启动。
+仅在整片预览已通过且用户明确说“出片”“导出视频”，或明确授权跳过确认并连续出片时运行。普通“下一步”不会自动触发导出。若要用 `--detach`，检查返回的日志与产物，不重复启动。
 
 ```bash
 node "$SHARED_VIDEO/tools/remotion.mjs" render --project "$PROJECT" --detach
 # 渲染实际结束后：
 python3 "$SHARED_VIDEO/tools/verify_export.py" --project "$PROJECT"
 python3 "$MINUTE_SKILL/scripts/one_minute.py" check \
-  --project "$PROJECT" --media "$PROJECT/output/one-minute-rrf.mp4"
+  --project "$PROJECT" --media "$PROJECT/output/warm-geometry.mp4"
 ```
 
-输出名从 `project.json.outputName` 读取，RRF 仅为示例。导出工具将原始 WAV 重新封装到画面轨；`-t` 取实际完整时间轴长度而非固定60秒，末尾最多补不足一帧的静音，不截断配音。`verify_export.py` 检查全解码、帧数、尺寸与多个有声窗口的波形对应；仍要正常速度完整审片，不能用机械检查证明听感。
+输出名从 `project.json.outputName` 读取，warm-geometry 仅为示例。导出工具将原始 WAV 重新封装到画面轨；`-t` 取实际完整时间轴长度而非固定60秒，末尾最多补不足一帧的静音，不截断配音。`verify_export.py` 检查全解码、帧数、尺寸与多个有声窗口的波形对应；仍要正常速度完整审片，不能用机械检查证明听感。
 
-`one_minute.py check` 返回0表示机械检查通过；返回1表示文字、声音配置、媒体或时间轴不一致；返回2表示缺少实际音频/时间轴。超60秒以 warnings 和 overTargetSec 报告，不单独导致失败。必须披露未验证项，不为通过检查而删改源稿。
+`one_minute.py check` 返回0表示机械检查通过；返回1表示文字、声音配置、媒体或时间轴不一致；返回2表示缺少实际音频/时间轴。超过锁定目标以 warnings 和 overTargetSec 报告，不单独导致失败。必须披露未验证项，不为通过检查而删改源稿。
+
+## 读音短样本与局部替换
+
+用户要求先试听读法时，使用当前声音和原速，在项目 `preview/` 保存完整上下文短句；交付后停下。用户认可才替换受影响的完整意群，备份旧音频与记录，保留字幕原文，不拼接孤立字母。配音改变后重新生成时间轴与对齐，复查受影响章节和音轨偏移；不改音频迁就旧动画。SSML 仅在使用者实际服务支持时使用，不将某个声音的读法当作所有声音通用规则。
+
+## 浏览器与服务收尾
+
+临时自动化检查在 `finally` 中关闭本次浏览器，录屏先正常保存。供用户查看的 Studio 仅在明确使用时保留，记录 PID、端口、项目和关闭时机；用户结束预览或要求关闭时核对归属后退出。不得关闭用户自己的浏览器或其他任务服务。

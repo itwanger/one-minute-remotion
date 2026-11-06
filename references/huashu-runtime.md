@@ -41,3 +41,9 @@ Canvas 主画面截止 y=890，字幕在独立 React 层的底部安全区内。
 在 `OUTLINE.md` 记录主要语法、造型规则、核心物体变换和镜头目的；在 `assets/references/visual-provenance.json` 记录上游 commit、实际导入函数、各函数对应的本条动作，区分上游库与新写的场景。先验证最能讲清原理的一段，再扩展成整片。记录静帧检查和真实播放的不同结果；具备多 Agent 能力时，整片按上游方法由未参与制作的 Agent 审片；单 Agent 环境记录自检及其局限，不虚称独立审片，修复遮挡、错数、过早揭晓和不连续动作。
 
 上游语法卡：[t1_3b1b](https://github.com/alchaincyf/huashu-art-motion/blob/8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c/references/动画语法/t1_3b1b.md)、[y3_whiteboard](https://github.com/alchaincyf/huashu-art-motion/blob/8a0d7d72ca65fcce6f8ba82c4a6c8dfe35b8422c/references/动画语法/y3_whiteboard.md)。这些是方法来源，示范场景和作者素材不放进新片。
+
+## 集合项目的共享资源
+
+项目位于 `one-minute/<topic>/<tool>/<variant>/` 时，安装器自动复用集合的 `shared/huashu/<上游提交>-<适配代码哈希>/`，在 `remotion/src/huashu` 和 `remotion/public/huashu-fonts` 创建相对链接。升级生成新目录，不覆盖旧片依赖；改过的本地副本拒绝替换。独立工程仍安装本地副本。
+
+暖米 `C` 和孟菲斯 `MEMPHIS` 从项目 `palette.ts`、`memphis-palette.ts` 引入，集合内基础色板共用，项目特有颜色留在本地覆盖。手机字号与整框边界以[视觉规范](visual-style.md)为准。

@@ -12,7 +12,7 @@ const Video: React.FC = () => {
     <Scene />
     {CUES.length > 0 && <Audio src={staticFile('audio/voiceover.wav')} />}
     {cue && <div style={{position:'absolute',bottom:72,left:120,right:120,display:'flex',justifyContent:'center'}}>
-      <div style={{fontSize:40,lineHeight:1.4,background:C.ink,color:C.card,padding:'14px 30px',borderRadius:14}}>{cue.text}</div>
+      <div style={{fontSize:48,lineHeight:1.4,background:C.ink,color:C.card,padding:'14px 30px',borderRadius:14}}>{cue.text}</div>
     </div>}
   </AbsoluteFill>;
 };

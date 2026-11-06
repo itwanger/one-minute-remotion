@@ -1,12 +1,46 @@
 # one-minute-remotion
 
-把 RRF、RAG、ReAct 这样的新名词，做成一条以一分钟为目标的中文科普视频。
+把一个知识点，做成一条 1 至 2 分钟的中文科普视频。支持勾股定理、牛顿第一定律、阿基米德原理、欧姆定律等数理化生知识，也支持 RRF、RAG、ReAct 等 AI 概念。
 
-从文字稿到配音、分镜、概念动画、字幕和 MP4，按阶段推进。画面借鉴并实际接入 [huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) 的形变、描画、公式与相机模块，默认采用二哥的暖米色、蓝色、铁锈橙色系。
+从文字稿到配音、分镜、概念动画、字幕和 MP4，按阶段推进。画面借鉴并实际接入 [huashu-art-motion](https://github.com/alchaincyf/huashu-art-motion) 的形变、描画、公式与相机模块，默认暖米几何，也可选择已经过实际项目打磨的孟菲斯画风。
 
-**保留你的文稿，用你选定的声音。说“下一步”，就只做下一步。**
+**保留你的文稿，用你选定的声音。说“下一步”，就只做下一步；动画约30秒一章，看过确认后再做下一章。**
 
-## 先看实际效果：RRF
+这里是独立 Skill 的开源主仓库：安装、制作规则、脚本与可导入的 ZIP 都从这里获取。[VibeScience](https://github.com/itwanger/vibe-science)提供配套的公开无声画面工程，不是使用本 Skill 的前置依赖。
+
+## 新版能力与目录
+
+- 写稿面向数理化生与 AI 知识，目标1至2分钟；默认120秒，现有60秒锁定目标继续保留。
+- 配音先试听、分镜先确认；动画按约30秒逐章交付有声 Studio 预览，整片确认并明确要求导出后才出 MP4。
+- 主题、工具、版本分开归档；动画库、字体和基础色板共用固定版本，各期的音频、时间轴与场景独立保存。
+- 手机观看默认48px字幕，检查完整标签框、公式上标和转场；提供暖米与孟菲斯两套视觉规范。
+
+```text
+你的工作目录/
+├── docs/src/ai/one-minute/                 文字稿
+└── videos/one-minute/
+    ├── pythagorean-theorem/codex/memphis/  主题 / 工具 / 版本
+    │   ├── project.json、PROGRESS.md
+    │   ├── audio/、build/、assets/
+    │   ├── remotion/、preview/
+    │   └── output/                        正式成片
+    ├── ohms-law/workbuddy/reviewed/        另一主题，可记录接力工具
+    ├── shared/                            固定版本动画库、字体、基础色板
+    └── _archive/                          历史试作（可选）
+```
+
+工具来源不明时用 `unattributed`；接力项目记录各工具参与环节，保留一份工程。`script/one-minute/` 集合也支持相同结构；旧的独立工程可继续使用，不强制迁移。
+
+## 画面案例：勾股定理
+
+[孟菲斯案例](references/approved-memphis.md)和[暖米几何案例](references/approved-pythagorean.md)记录构图、拼图证明、手机字号与实际返修取舍。下面是公开无声工程的真实成帧，**不是已导出的有声成片**。
+
+![孟菲斯勾股定理：完整拼图与清晰主体开场](references/approved-memphis/opening.png)
+
+[文字稿范例](examples/pythagorean-theorem.md) · [视觉规范](references/visual-style.md) · [逐章审片流程](references/chapter-preview.md)
+
+
+## 完整视频案例：RRF（早期60秒目标）
 
 下面是这次 RRF 视频的真实输出：文档的两路贡献逐步合并，最终榜单连续换位。动态图截取原视频46.8–62.3秒，正常速度播放，无声。
 
@@ -67,9 +101,10 @@ Agent 会进入配音阶段。如果还没有声音配置，会先让你指定�
 | 你当前的进度 | 再说“下一步”时做什么 | 交付后 |
 | --- | --- | --- |
 | 文字稿已保存 | 固定文字与声音，生成或导入配音，量时并核对 | 停下，让你试听 |
-| 配音已交付 | 按实际配音设计分镜 | 停下，让你看分镜 |
-| 分镜已交付 | 制作动画与字幕，后台启动 Studio 并验证播放 | 停下，让你看动态预览 |
-| 动画预览已完成 | 导出 MP4，核对文字、完整解码与音画同步 | 交付成片与项目 |
+| 配音已试听确认 | 按实际配音设计分镜和约30秒审片章节 | 停下，让你看分镜 |
+| 分镜已确认 | 只制作当前章，交付有声 Studio 预览 | 本章确认后才做下一章 |
+| 全部章节已通过 | 交付整片有声 Studio 预览，检查衔接 | 停下，等待整片确认 |
+| 整片已确认且明确要求导出 | 导出 MP4，核对文字、完整解码与音画同步 | 交付成片与项目 |
 
 当前阶段有问题时，先修当前阶段。“下一步”不会绕过问题；未试听通过也不会被记录成“声音已认可”。只有你明确要求“一口气做完”，才连续执行授权范围内的阶段。
 
@@ -129,7 +164,7 @@ Agent 会进入配音阶段。如果还没有声音配置，会先让你指定�
 
 ## 这个 Skill 会坚持什么
 
-- 文稿完整，选定声音与语速保留。超过一分钟只报告实测时长，不删稿、不建议删减、不截断或加速。
+- 文稿完整，选定声音与语速保留。超过设定目标（默认120秒）只报告实测时长，不删稿、不建议删减、不截断或加速。
 - 动画展示机制，主画面不重复字幕里的整句解释或同义问答。
 - 相关元素成组对齐，公式、参数和结果有清楚的关系；异常状态仍保留对象身份。
 - 分组括号朝向与范围正确，检查动画中间状态的遮挡和穿越。
@@ -141,15 +176,16 @@ Agent 会进入配音阶段。如果还没有声音配置，会先让你指定�
 ```text
 SKILL.md                         Agent 入口
 references/                      写稿、动画、运行流程与来源
-scripts/                         文字锁定、资源安装、Studio 后台启动
+scripts/                         文字锁定、共享资源安装、Studio 后台启动
 assets/huashu/                   固定版本的绘图库和字体，附原许可与哈希
 assets/runtime/shared/           独立项目模板、音频与导出工具
 assets/palette.json              默认色板及出处
-examples/rrf.md                   演示视频使用的完整文稿
+assets/styles/                   孟菲斯基础色板
+examples/                        RRF 与勾股定理文字稿范例
 docs/rrf-case.md                  案例、分镜与实际截图/录屏
 ```
 
-开发时运行 `python3 -m unittest discover -s tests -v`，打包运行 `python3 scripts/package_skill.py --output dist/one-minute-remotion.zip`。安装不会把作者现有的个人技能目录切换到这个仓库。
+开发时运行 `python3 -m unittest discover -s tests -v`，打包运行 `python3 scripts/package_skill.py --output dist/one-minute-remotion.zip`。安装不会把作者现有的个人技能目录切换到这个仓库。维护者同步范围与发布检查见 [开源维护说明](docs/maintaining.md)。
 
 ## 来源与许可
 
